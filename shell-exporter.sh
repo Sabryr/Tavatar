@@ -20,13 +20,19 @@ do
 	last=$(tail -n 1 $SHARED_HISTORY_FILE)
 	last_base=$(echo $last | awk '{print $1}')
 	which "$last_base"  > /dev/null 2>&1
-	if [[  $? -eq "0" || $last == "#print*" ]] 
+	if [[  $? -eq "0" ]] || [[ "$last" == *http* ]]
         then
-		if [ "$last" != "$last_printed" ] 
+		if [ "$last" != "$last_printed" ]
 		then
 			echo $i". "$last
 			sed -i -- '/\/body/d'  history.html
-			echo "<li>$last</li>" >> history.html
+			if [[ "$last" == *http* ]]
+			then
+				last_m=$(echo "$last" | sed "s/#//")
+				echo "<li><a href=\"$last_m\"> $last_m</a></li>" >> history.html
+			else
+				echo "<li>$last</li>" >> history.html
+			fi
 			echo " </ol> </body> </html>" >> history.html
 			scp history.html $WEB_SERVER_DIR > /dev/null 2>&1
 			last_printed="$last"
