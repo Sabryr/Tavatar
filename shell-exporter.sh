@@ -20,7 +20,7 @@ do
 	last=$(tail -n 1 $SHARED_HISTORY_FILE)
 	last_base=$(echo $last | awk '{print $1}')
 	which "$last_base"  > /dev/null 2>&1
-	if [  $? -eq "0" ] 
+	if [[  $? -eq "0" || $last == "#print*" ]] 
         then
 		if [ "$last" != "$last_printed" ] 
 		then
