@@ -3,10 +3,11 @@
 #used for keeping a list of commands used 
 #so students can follow, if fall behind
 #for this to work, history must be redirected as follows
+#export SHARED_HISTORY_FILE=$HOME/.online_history
 #export HISTFILE=$SHARED_HISTORY_FILE
 #On the working terminal 
 # export  PROMPT_COMMAND="history -a"
-#export  SHARED_HISTORY_FILE=<the histotory file>
+# export  SHARED_HISTORY_FILE=$HOME/.online_history
 # export HISTFILE=$SHARED_HISTORY_FILE
  
 export PS1="\# "
