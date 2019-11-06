@@ -3,14 +3,14 @@
 #used for keeping a list of commands used 
 #so students can follow, if fall behind
 #for this to work, history must be redirected as follows
-#export SHARED_HISTORY_FILE=$HOME/.online_history
-#export HISTFILE=$SHARED_HISTORY_FILE
 #On the working terminal 
 # export  PROMPT_COMMAND="history -a"
 # export  SHARED_HISTORY_FILE=$HOME/.online_history
 # export HISTFILE=$SHARED_HISTORY_FILE
  
 export PS1="\# "
+export SHARED_HISTORY_FILE=$HOME/.online_history
+export HISTFILE=$SHARED_HISTORY_FILE
 last_printed="NA"
 WEB_SERVER_DIR="pariganaka.uio.no:~/www_docs/"
 i=1;
