@@ -13,6 +13,7 @@ export SHARED_HISTORY_FILE=$HOME/.online_history
 export HISTFILE=$SHARED_HISTORY_FILE
 last_printed="NA"
 WEB_SERVER_DIR="pariganaka.uio.no:~/www_docs/"
+echo "webaddress: http://folk.uio.no/sabryr/history.html"
 i=1;
 echo "<html> <head> <title>History</title> <meta http-equiv=\"refresh\" content=\"3\" />  </head>  <body><ol type=\"1\">" > history.html
 while [ $? -eq "0" ]; 
