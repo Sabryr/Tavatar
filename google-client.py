@@ -54,7 +54,7 @@ def auth():
     if os.path.exists('token.pickle'):
         with open('token.pickle', 'rb') as token:
             creds = pickle.load(token)
-    
+
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -77,6 +77,7 @@ def auth():
 
 
 def insert(service):
+   #https://developers.google.com/docs/api/how-tos/lists
     requests = [
          {
             'insertText': {
@@ -85,7 +86,16 @@ def insert(service):
                 },
                 'text': DOCUMENT_TEXT + '\n'
             }
-        },
+         },
+         {
+            'createParagraphBullets': {
+                'range': {
+                    'startIndex': 1,
+                    'endIndex':  2
+                },
+                'bulletPreset': 'NUMBERED_DECIMAL_ALPHA_ROMAN',
+            }
+         }
     ]
 
     result = service.documents().batchUpdate(
