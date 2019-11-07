@@ -7,7 +7,8 @@
 # export  PROMPT_COMMAND="history -a"
 # export  SHARED_HISTORY_FILE=$HOME/.online_history
 # export HISTFILE=$SHARED_HISTORY_FILE
- 
+
+DOC_NM="1VQ4lUr1hrrKQwOAYa2z0h-0xltBm1PEuQLY8VksWk7c"
 VERSION="0.1"
 connect () {
 	echo "function"
@@ -27,9 +28,11 @@ connect () {
                 	then
                         	last_printed="$last"
 				echo "$last_printed"
+				send-togoogle-client $last_printed
                         elif [[ "$last" == *http* ]]
                         then
 				echo "$last_printed"
+				send-togoogle-client $last_printed
                                 #last_printed= "$last"
 				#last_m=$(echo "$last" | sed "s/#//")
                 		#echo "<li><a href=\"$last_m\"> $last_m</a></li>" >> history.html
@@ -47,6 +50,10 @@ setterm () {
 	echo "export  SHARED_HISTORY_FILE=$HOME/.online_history" >> $HOME/.tavatar
 	echo "export  HISTFILE=$HOME/.online_history" >> $HOME/.tavatar
 	echo "source $HOME/.tavatar"
+}
+
+send-togoogle-client () {
+	 python  google-client.py $DOC_NM 1 $1
 }
 
 if [[ $# -eq 0 ]] 
@@ -71,5 +78,3 @@ then
 else
 	echo "Print help"
 fi
-
-
