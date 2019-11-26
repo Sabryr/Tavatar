@@ -8,7 +8,7 @@
 # export  SHARED_HISTORY_FILE=$HOME/.online_history
 # export HISTFILE=$SHARED_HISTORY_FILE
 
-DOC_NM="1VQ4lUr1hrrKQwOAYa2z0h-0xltBm1PEuQLY8VksWk7c"
+DOC_NM=""
 VERSION="0.1"
 ENV_NM="$HOME/.tavatar_env"
 connect () {
@@ -87,9 +87,24 @@ help () {
 	echo "./tavatar.sh MAIN"
 	echo "On the other"
 	echo "./tavatar.sh CONNECT <Google doc ID>"
-	
+
 }
-create_env
+#create_env
+
+get DOC_NM() {
+	if [ -z "$var" ]
+	then
+		echo "\$var is empty"
+		if [ -f "$DOC_NM" ]
+		then
+			echo "File found $DOC_NM"
+		else
+			 echo "file not found $DOC_NM"
+		fi
+	else
+		echo "\$var is NOT empty"
+	fi
+}
 
 if [[ $# -eq 0 ]] 
 then
