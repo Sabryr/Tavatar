@@ -11,10 +11,12 @@
 DOC_NM=""
 VERSION="0.1"
 ENV_NM="$HOME/.tavatar_env"
+HIST_NM="$HOME/.tavatar_history"
+SCRIPT_PATH=$(which $0)
 connect () {
 	echo "function"
 	export PS1="\# "
-	export SHARED_HISTORY_FILE=$HOME/.online_history
+	export SHARED_HISTORY_FILE=$HIST_NM
 	export HISTFILE=$SHARED_HISTORY_FILE
 	last_printed="NA"
 	i=1;
@@ -38,9 +40,6 @@ connect () {
                         then
 				echo "$last_printed"
 				send-togoogle-client "$last_printed"
-                                #last_printed= "$last"
-				#last_m=$(echo "$last" | sed "s/#//")
-                		#echo "<li><a href=\"$last_m\"> $last_m</a></li>" >> history.html
                         fi
                         i=$((i+1))
         	fi
@@ -62,8 +61,8 @@ send-togoogle-client () {
 }
 
 reset () {
-	echo "History cleaned"
-        rm $HOME/.online_history
+	echo "Cleaning history"
+        rm $HIST_NM
 }
 
 create_env () {
@@ -73,7 +72,9 @@ create_env () {
 		echo "Creating Python environemnt "
 		tavatar_dir=$(which tavatar.sh) 
 		echo "tavetar in $tavatar_dir"
-		#virtualenv $ENV_NM
+		pip install --user virtualenv
+		virtualenv $ENV_NM
+		cp SCRIPT_PATH  $ENV_NM/bin/
 		source $ENV_NM/bin/activate
 		pip install -r requirements.txt
 	else
@@ -89,22 +90,31 @@ help () {
 	echo "./tavatar.sh CONNECT <Google doc ID>"
 
 }
-#create_env
 
-get DOC_NM() {
-	if [ -z "$var" ]
+create_blank_hist () {
+	if [ ! -f "$DOC_NM" ]
 	then
-		echo "\$var is empty"
-		if [ -f "$DOC_NM" ]
-		then
-			echo "File found $DOC_NM"
-		else
-			 echo "file not found $DOC_NM"
-		fi
-	else
-		echo "\$var is NOT empty"
+		echo  > $HIST_NM
 	fi
+
 }
+
+create_env
+
+#get DOC_NM () {
+#	if [ -z "$var" ]
+#	then
+#		echo "\$var is empty"
+#		if [ -f "$DOC_NM" ]
+#		then
+#		echo "File found $DOC_NM"
+#		else
+#			 echo "file not found $DOC_NM"
+#		fi
+#	else
+#		echo "\$var is NOT empty"
+#	fi
+#}
 
 if [[ $# -eq 0 ]] 
 then
@@ -115,22 +125,27 @@ then
 	exit 0;
 elif [ "$1" == "MAIN" ]
 then
+	create_blank_hist
 	echo "Main"
 	setterm
 elif [ "$1" == "CONNECT" ]
 then
+	create_blank_hist
 	if [[ $# -eq 2 ]]
 	then
 		DOC_NM="$2"
 		echo "Connect"
 		connect
+	elif [ -f "$ENV_NM/$DOC_NM" ]]
+	then
+		echo "Reading Google document ID from $ENV_NM/$DOC_NM"
+		DOC_NM=$(cat $ENV_NM/$DOC_NM)
 	else
 		help
 	fi
 elif [ "$1" == "CLEAN" ]
 then
-	echo "History cleaned"
-	rm $HOME/.online_history
+	reset
 else
-	echo "Print help"
+	help
 fi
