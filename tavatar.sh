@@ -12,17 +12,36 @@ DOC_NM=""
 VERSION="0.1"
 ENV_NM="$HOME/.tavatar_env"
 HIST_NM="$HOME/.tavatar_history"
-SCRIPT_PATH=$(which $0)
+SCRIPT_PATH=$0
+
+check_virtualenv () {
+	which python  > /dev/null 2>&1
+	if [[  $? -eq "0" ]]
+	then
+		echo "Pyhton found $(which python)"
+		which virtualenv  > /dev/null 2>&1
+		if [[ ! $? -eq "0" ]]
+		then
+			echo "virtualenv not found please install this first and try again "
+			exit 1
+		fi
+	else
+		echo "This programs requires Python3"
+		exit 1
+	fi
+}
+
 connect () {
-	echo "function"
 	export PS1="\# "
 	export SHARED_HISTORY_FILE=$HIST_NM
 	export HISTFILE=$SHARED_HISTORY_FILE
 	last_printed="NA"
 	i=1;
+	echo "$SHARED_HISTORY_FILE"
 	while [ $? -eq "0" ]; 
 	do
 		last=$(tail -n 1 $SHARED_HISTORY_FILE)
+		echo "$last"
         	last_base=$(echo $last | awk '{print $1}')
         	which "$last_base"  > /dev/null 2>&1
 		if [[  $? -eq "0" ]] || [[ "$last" == *http* ]] || [[ "$last" == *STOP* ]]
@@ -51,8 +70,8 @@ connect () {
 setterm () {
 	echo "#Tavatar connect" > $HOME/.tavatar
 	echo "export  PROMPT_COMMAND=\"history -a\"" >> $HOME/.tavatar 
-	echo "export  SHARED_HISTORY_FILE=$HOME/.online_history" >> $HOME/.tavatar
-	echo "export  HISTFILE=$HOME/.online_history" >> $HOME/.tavatar
+	echo "export  SHARED_HISTORY_FILE=$HIST_NM" >> $HOME/.tavatar
+	echo "export  HISTFILE=$HIST_NM" >> $HOME/.tavatar
 	echo "source $HOME/.tavatar"
 }
 
@@ -66,15 +85,15 @@ reset () {
 }
 
 create_env () {
+	check_virtualenv
 	ls $ENV_NM  > /dev/null 2>&1
 	if [[ !   $? -eq "0" ]]
 	then
 		echo "Creating Python environemnt "
-		tavatar_dir=$(which tavatar.sh) 
+		tavatar_dir=$0 
 		echo "tavetar in $tavatar_dir"
-		pip install --user virtualenv
 		virtualenv $ENV_NM
-		cp SCRIPT_PATH  $ENV_NM/bin/
+		cp $SCRIPT_PATH  $ENV_NM/bin/
 		source $ENV_NM/bin/activate
 		pip install -r requirements.txt
 	else
@@ -134,7 +153,6 @@ then
 	if [[ $# -eq 2 ]]
 	then
 		DOC_NM="$2"
-		echo "Connect"
 		connect
 	elif [ -f "$ENV_NM/$DOC_NM" ]]
 	then
