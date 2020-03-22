@@ -25,21 +25,24 @@ other option you want, too):
 ./tavatar.sh MAIN
 ```
 
-This will tell you to source this file.  You can look at what it does.
-You can, instead of this, do anything that appends to
-`~/.tavatar_history`:
+This will tell you to source the shell initialization file (for bash,
+but there are some for other shells, too).  All it does is append
+every command to the file `~/.tavatar_history`.  Instead of sourcing
+this, you can do anything else that appends to this file:
 
 ```
-source ~/.tavatar
+source init.bash.sh
 ```
 
 Then finally, start the process that watches the history file and
 uploads to the google doc.  This process polls the history file and
 uploads when there are new lines.  It will also prompt for google
-authentication the first time.
+authentication the first time (and cache that into `token.pickle`).
+The app isn't verified, so you have to accept the risk under
+"advanced".
 
 ```
-bash ./tavatar.sh CONNECT '1ftGqZ-1yfnlyxc8dbhbJ42S2ZAyyvFuxtQTZ9bOFGMs'
+./tavatar.sh CONNECT '1ftGqZ-1yfnlyxc8dbhbJ42S2ZAyyvFuxtQTZ9bOFGMs'
 ```
 
 ## Notes

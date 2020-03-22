@@ -19,7 +19,7 @@ check_virtualenv () {
 	which python  > /dev/null 2>&1
 	if [[  $? -eq "0" ]]
 	then
-		echo "Pyhton found $(which python)"
+		#echo "Python found $(which python)"
 		which virtualenv  > /dev/null 2>&1
 		if [[ ! $? -eq "0" ]]
 		then
@@ -39,7 +39,7 @@ connect () {
 	export HISTFILE=$SHARED_HISTORY_FILE
 	last_printed="NA"
 	i=1;
-	echo "$SHARED_HISTORY_FILE"
+	echo "History file is $SHARED_HISTORY_FILE"
 	while [ $? -eq "0" ];
 	do
 		last=$(tail -n 1 $SHARED_HISTORY_FILE)
@@ -77,7 +77,7 @@ setterm () {
     #echo "export  PROMPT_COMMAND=\"history -a\"" >> $HOME/.tavatar
     #echo "export  SHARED_HISTORY_FILE=$HIST_NM" >> $HOME/.tavatar
     #echo "export  HISTFILE=$HIST_NM" >> $HOME/.tavatar
-    echo "source $(dirname $0)/init.bash.sh"
+    echo "To initialize shell: source $(dirname $0)/init.bash.sh"
 }
 
 send-togoogle-client () {
@@ -155,7 +155,8 @@ then
 	setterm
 elif [ "$1" == "CONNECT" ]
 then
-	create_blank_hist
+    create_blank_hist
+    setterm
 	if [[ $# -eq 2 ]]
 	then
 		DOC_NM="$2"
