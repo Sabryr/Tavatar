@@ -8,7 +8,8 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-#Scope to read and write
+# Scope to read and write
+# https://developers.google.com/identity/protocols/oauth2/scopes
 SCOPES = ['https://www.googleapis.com/auth/documents']
 
 #DOCUMENT_ID = '1VQ4lUr1hrrKQwOAYa2z0h-0xltBm1PEuQLY8VksWk7c'
