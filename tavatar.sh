@@ -1,9 +1,9 @@
 #!/bin/bash
 #Script to print history of a nother terminal
-#used for keeping a list of commands used 
+#used for keeping a list of commands used
 #so students can follow, if fall behind
 #for this to work, history must be redirected as follows
-#On the working terminal 
+#On the working terminal
 # export  PROMPT_COMMAND="history -a"
 # export  SHARED_HISTORY_FILE=$HOME/.online_history
 # export HISTFILE=$SHARED_HISTORY_FILE
@@ -15,6 +15,7 @@ HIST_NM="$HOME/.tavatar_history"
 SCRIPT_PATH=$0
 
 check_virtualenv () {
+    # Check if Python and virtualenv are available.  Return 1 if not.
 	which python  > /dev/null 2>&1
 	if [[  $? -eq "0" ]]
 	then
@@ -32,18 +33,19 @@ check_virtualenv () {
 }
 
 connect () {
+    # Main function to monitor the history file and send data to the doc.
 	export PS1="\# "
 	export SHARED_HISTORY_FILE=$HIST_NM
 	export HISTFILE=$SHARED_HISTORY_FILE
 	last_printed="NA"
 	i=1;
 	echo "$SHARED_HISTORY_FILE"
-	while [ $? -eq "0" ]; 
+	while [ $? -eq "0" ];
 	do
 		last=$(tail -n 1 $SHARED_HISTORY_FILE)
-		echo "$last"
+		#echo "$last"
         	last_base=$(echo $last | awk '{print $1}')
-        	which "$last_base"  > /dev/null 2>&1
+        	command -v "$last_base"  > /dev/null 2>&1
 		if [[  $? -eq "0" ]] || [[ "$last" == *http* ]] || [[ "$last" == *STOP* ]]
         	then
 			if [[ "$last_base" == "STOP" ]]
@@ -57,6 +59,7 @@ connect () {
 				send-togoogle-client "$last_printed"
                         elif [[ "$last" == *http* ]]
                         then
+                        	last_printed="$last"
 				echo "$last_printed"
 				send-togoogle-client "$last_printed"
                         fi
@@ -68,15 +71,17 @@ connect () {
 }
 
 setterm () {
-	echo "#Tavatar connect" > $HOME/.tavatar
-	echo "export  PROMPT_COMMAND=\"history -a\"" >> $HOME/.tavatar 
-	echo "export  SHARED_HISTORY_FILE=$HIST_NM" >> $HOME/.tavatar
-	echo "export  HISTFILE=$HIST_NM" >> $HOME/.tavatar
-	echo "source $HOME/.tavatar"
+    # Do the terminal setup
+    #cp $(dirname $0)/initsh ~/.tavatar
+    #echo "#Tavatar connect" > $HOME/.tavatar
+    #echo "export  PROMPT_COMMAND=\"history -a\"" >> $HOME/.tavatar
+    #echo "export  SHARED_HISTORY_FILE=$HIST_NM" >> $HOME/.tavatar
+    #echo "export  HISTFILE=$HIST_NM" >> $HOME/.tavatar
+    echo "source $(dirname $0)/init.bash.sh"
 }
 
 send-togoogle-client () {
-	 python  google-client.py $DOC_NM 1 "$1"
+	 python google-client.py $DOC_NM 1 "$1"
 }
 
 reset () {
@@ -90,8 +95,9 @@ create_env () {
 	if [[ !   $? -eq "0" ]]
 	then
 		echo "Creating Python environemnt "
-		tavatar_dir=$0 
+		tavatar_dir=$0
 		echo "tavetar in $tavatar_dir"
+		# also works with python3: -p python3
 		virtualenv $ENV_NM
 		cp $SCRIPT_PATH  $ENV_NM/bin/
 		source $ENV_NM/bin/activate
@@ -135,7 +141,7 @@ create_env
 #	fi
 #}
 
-if [[ $# -eq 0 ]] 
+if [[ $# -eq 0 ]]
 then
 	help
 elif [ "$1" == "-v" ]
@@ -154,7 +160,7 @@ then
 	then
 		DOC_NM="$2"
 		connect
-	elif [ -f "$ENV_NM/$DOC_NM" ]]
+	elif [[ -f "$ENV_NM/$DOC_NM" ]]
 	then
 		echo "Reading Google document ID from $ENV_NM/$DOC_NM"
 		DOC_NM=$(cat $ENV_NM/$DOC_NM)
