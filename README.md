@@ -9,7 +9,47 @@ special infra needed on your part.
 
 ## Usage
 
+Set up the virtual environments:
 
+```
+./tavatar.sh
+```
+
+Prepare the shell.  This will blank the history file
+`~/.tavatar_history` - append to this file to send data.  It will then
+create a file `~/.tavatar`, which you can source to set up a
+`PROMPT_COMMAND` to append history to this file (but you can use any
+other option you want, too):
+
+```
+./tavatar.sh MAIN
+```
+
+This will tell you to source this file.  You can look at what it does.
+You can, instead of this, do anything that appends to
+`~/.tavatar_history`:
+
+```
+source ~/.tavatar
+```
+
+Then finally, start the process that watches the history file and
+uploads to the google doc.  This process polls the history file and
+uploads when there are new lines.  It will also prompt for google
+authentication the first time.
+
+```
+bash ./tavatar.sh CONNECT '1ftGqZ-1yfnlyxc8dbhbJ42S2ZAyyvFuxtQTZ9bOFGMs'
+```
+
+## Notes
+
+* Only actual shell commands are uploaded, i.e. if you mistype the
+  command name it won't be updated.  The intention is to save you from
+  uploading mis-pasted text.
+
+* But something including `http` will be uploaded - to send links to
+  students.
 
 
 
@@ -23,4 +63,4 @@ special infra needed on your part.
 
 Author Sabry Razick, University of Oslo
 
-This is currently in alpha.
+This is currently in alpha.  The Google oauth app is not verified yet.
