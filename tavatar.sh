@@ -17,6 +17,11 @@ SCRIPT_PATH=$0
 check_virtualenv () {
     # Check if Python and virtualenv are available.  Return 1 if not.
 	which python  > /dev/null 2>&1
+	if [[  $? -ne "0" ]]
+   	then
+        	which python3  > /dev/null 2>&1
+        fi
+
 	if [[  $? -eq "0" ]]
 	then
 		#echo "Python found $(which python)"
