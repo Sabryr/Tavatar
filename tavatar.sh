@@ -60,7 +60,8 @@ connect () {
 			elif [ "$last" != "$last_printed" ]
                 	then
                         	last_printed="$last"
-                                printf "($i) $last_printed | "
+                                #printf "($i) $last_printed | "
+                                printf "$last_printed | "
                                 if [ $(($i % 4)) == 0 ]
 				then
 					echo ""
