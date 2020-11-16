@@ -60,15 +60,21 @@ connect () {
 			elif [ "$last" != "$last_printed" ]
                 	then
                         	last_printed="$last"
-				echo "$last_printed"
+                                printf "($i) $last_printed | "
+                                if [ $(($i % 4)) == 0 ]
+				then
+					echo ""
+  				fi
+                                i=$((i+1))
+
 				send-togoogle-client "$last_printed"
+
                         elif [[ "$last" == *http* ]]
                         then
                         	last_printed="$last"
 				echo "$last_printed"
 				send-togoogle-client "$last_printed"
                         fi
-                        i=$((i+1))
         	fi
 		sleep 2
 
